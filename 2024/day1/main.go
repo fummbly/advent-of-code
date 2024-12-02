@@ -8,16 +8,9 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/fummbly/advent-of-code/utilities"
 )
-
-func intAbs(a, b int) int {
-	if a > b {
-		return a - b
-	}
-
-	return b - a
-
-}
 
 func main() {
 
@@ -101,7 +94,7 @@ func partOneSolve(leftList, rightList []int) int {
 	for i := range leftList {
 		fmt.Printf("Left List Number: %d, Right List Number: %d\n", leftList[i], rightList[i])
 		// get the distance
-		distance := intAbs(leftList[i], rightList[i])
+		distance := utilities.IntAbs(leftList[i], rightList[i])
 		fmt.Printf("Distance: %d\n", distance)
 		// add the distance to the totalDistance
 		totalDistance += distance
