@@ -24,7 +24,7 @@ func main() {
 
 	for _, line := range input {
 		regMuls = append(regMuls, getMuls(line, []string{}))
-		conditionalMuls = append(conditionalMuls, getMulsConditional(line, []string{}))
+		conditionalMuls = append(conditionalMuls, getMulsConditional(line, []string{}, true))
 	}
 
 	for _, line := range regMuls {
@@ -120,13 +120,16 @@ func getMuls(line string, mulList []string) []string {
 
 }
 
-func getMulsConditional(line string, mulList []string) []string {
+func getMulsConditional(line string, mulList []string, active bool) []string {
 
 	if len(line) < 9 {
 		return mulList
 	}
 
-	//dont := false
+  dontIndex := strings.Index(line, "don't()")
+  doIndex := strings.Index(line, "do()")
+
+
 
 	mulStart := strings.Index(line, "mul")
 	if mulStart == -1 {
@@ -158,13 +161,18 @@ func getMulsConditional(line string, mulList []string) []string {
 		}
 	*/
 
-	dontIndex := strings.Index(line, "don't()")
-	if dontIndex != -1 && dontIndex < endParen {
-		fmt.Printf("Dont Found: %s\n", line[dontIndex:endParen+1])
-	}
+  
 
-	mulList = append(mulList, line[mulStart:endParen+1])
 
-	return getMuls(line[endParen+1:], mulList)
+  if doIndex < mulStart && doIndex > dontIndex {
+    active = true
+    mulList = append(mulList, line[mulStart:endParen+1])
+  } else if dontIndex < mulStart && dontIndex > doIndex {
+    active = false
+    fmt.Printf("Command Omitted: %s\n", line[mulStart: endParen+1])
+  }
+
+
+	return getMulsConditional(line[endParen+1:], mulList, active)
 
 }
